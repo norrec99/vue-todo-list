@@ -51,7 +51,10 @@ export default {
     }
 
     function removeTodo(index) {
-      todos.value.splice(index, 1);
+      console.log(this.todos[index].done);
+      if (this.todos[index].done === true) {
+        todos.value.splice(index, 1);
+      }
     }
 
     function markAllDone() {
