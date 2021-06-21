@@ -7,27 +7,36 @@
         <input
           v-model="newTodo"
           type="text"
-          class="border-2 border-indigo-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+          class="border-2 border-indigo-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md p-2"
           placeholder=" Wash the dishes"
         />
       </div>
     </form>
 
-    <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 mt-8">
+    <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
       <li
-        v-for="todo in todos"
+        v-for="(todo, index) in todos"
         :key="todo.id"
         class="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
       >
-        <div class="w-full flex items-center justify-between p-6 space-x-6">
+        <div
+          class="w-full flex items-center justify-between p-6 space-x-6"
+          :class="{ done: todo.done }"
+        >
           <div class="flex-1 truncate">
             <div class="flex items-center space-x-3">
               <h3 class="text-gray-900 text-sm font-medium truncate">
                 {{ todo.name }}
               </h3>
               <span
+                v-if="todo.done"
                 class="flex-shrink-0 inline-block px-2 py-0.5 text-green-800 text-xs font-medium bg-green-100 rounded-full"
-                >{{ todo.role }}</span
+                >Done</span
+              >
+              <span
+                v-else
+                class="flex-shrink-0 inline-block px-2 py-0.5 text-green-800 text-xs font-medium bg-red-100 rounded-full"
+                >Ongoing</span
               >
             </div>
             <p class="mt-1 text-gray-500 text-sm truncate">
@@ -44,28 +53,27 @@
           <div class="-mt-px flex divide-x divide-gray-200">
             <div class="w-0 flex-1 flex">
               <a
-                :href="`mailto:${todo.email}`"
-                class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
+                class="button relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-white hover:bg-green-500"
+                @click="toggleDone(todo)"
               >
-                <MailIcon class="w-5 h-5 text-gray-400" aria-hidden="true" />
+                <CheckIcon class="w-5 h-5 text-black-400" aria-hidden="true" />
                 <span class="ml-3">Done</span>
               </a>
             </div>
             <div class="-ml-px w-0 flex-1 flex">
               <a
-                :href="`tel:${todo.telephone}`"
-                class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500"
+                class="button relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-white hover:bg-yellow-500"
               >
-                <PhoneIcon class="w-5 h-5 text-gray-400" aria-hidden="true" />
+                <PencilIcon class="w-5 h-5 text-black-400" aria-hidden="true" />
                 <span class="ml-3">Edit</span>
               </a>
             </div>
             <div class="-ml-px w-0 flex-1 flex">
               <a
-                :href="`tel:${todo.telephone}`"
-                class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500"
+                class="button relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-white hover:bg-red-500"
+                @click="removeTodo(index)"
               >
-                <PhoneIcon class="w-5 h-5 text-gray-400" aria-hidden="true" />
+                <TrashIcon class="w-5 h-5 text-black-400" aria-hidden="true" />
                 <span class="ml-3">Delete</span>
               </a>
             </div>
@@ -78,18 +86,15 @@
 
 <script>
 import { ref } from "vue";
-import { MailIcon, PhoneIcon } from "@heroicons/vue/solid";
+import { CheckIcon, PencilIcon, TrashIcon } from "@heroicons/vue/solid";
 
 const newTodo = ref("");
 const todos = ref([
   {
-    name: "Jane Cooper",
-    content: "Regional Paradigm Technician",
-    role: "Admin",
-    email: "janecooper@example.com",
-    telephone: "+1-202-555-0170",
-    imageUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
+    name: "Çağatay Soyer",
+    content: "Wash the dishes",
+    done: false,
+    imageUrl: "https://github.com/norrec99.png",
   },
 
   // More todos...
@@ -97,8 +102,9 @@ const todos = ref([
 
 export default {
   components: {
-    MailIcon,
-    PhoneIcon,
+    CheckIcon,
+    PencilIcon,
+    TrashIcon,
   },
   setup() {
     function addNewTodo() {
@@ -106,18 +112,40 @@ export default {
         id: Date.now(),
         done: false,
         content: newTodo.value,
-        name: "Jane Cooper",
-        role: "Admin",
-        imageUrl:
-          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
+        name: "Çağatay Soyer",
+
+        imageUrl: "https://github.com/norrec99.png",
       });
       newTodo.value = "";
     }
+
+    function toggleDone(todo) {
+      todo.done = !todo.done;
+      console.log(todo.done);
+    }
+
+    function removeTodo(index) {
+      console.log(this.todos[index].done);
+      if (this.todos[index].done === true) {
+        todos.value.splice(index, 1);
+      }
+    }
+
     return {
       todos,
       newTodo,
       addNewTodo,
+      toggleDone,
+      removeTodo,
     };
   },
 };
 </script>
+<style scoped>
+.button {
+  cursor: pointer;
+}
+.done {
+  text-decoration: line-through;
+}
+</style>
