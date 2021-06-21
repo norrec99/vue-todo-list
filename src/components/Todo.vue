@@ -1,5 +1,4 @@
 <template>
-  <h1>Todo List</h1>
   <div class="w-full flex justify-center">
     <form @submit.prevent="addNewTodo">
       <label class="">Add Todo</label>
