@@ -97,7 +97,22 @@ import { CheckIcon, PencilIcon, TrashIcon } from "@heroicons/vue/solid";
 
 const todoNumber = ref(1);
 const newTodo = ref("");
-const todos = ref([]);
+const todos = ref([
+  {
+    name: "Sample Todo 1",
+    content: "Wash the dishes",
+    done: false,
+    imageUrl: "https://github.com/norrec99.png",
+  },
+  {
+    name: "Sample Todo 2",
+    content: "Walk the dog",
+    done: false,
+    imageUrl: "https://github.com/norrec99.png",
+  },
+
+  // More todos...
+]);
 
 export default {
   components: {
