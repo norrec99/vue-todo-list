@@ -2,7 +2,9 @@
 <template>
   <div>
     <form @submit.prevent="addNewTodo">
-      <label class="block text-sm font-medium text-gray-700">Add Todo</label>
+      <label class="block text-base font-medium text-gray-700 required"
+        >Add Todo</label
+      >
       <div class="mt-1">
         <input
           v-model="newTodo"
@@ -19,13 +21,13 @@
         :key="todo.id"
         class="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
       >
-        <div
-          class="w-full flex items-center justify-between p-6 space-x-6"
-          :class="{ done: todo.done }"
-        >
+        <div class="w-full flex items-center justify-between p-6 space-x-6">
           <div class="flex-1 truncate">
             <div class="flex items-center space-x-3">
-              <h3 class="text-gray-900 text-sm font-medium truncate">
+              <h3
+                class="text-gray-900 text-sm font-medium truncate"
+                :class="{ done: todo.done }"
+              >
                 {{ todo.name }}
               </h3>
               <span
@@ -39,7 +41,10 @@
                 >Ongoing</span
               >
             </div>
-            <p class="mt-1 text-gray-500 text-sm truncate">
+            <p
+              class="mt-1 text-gray-500 text-sm truncate"
+              :class="{ done: todo.done }"
+            >
               {{ todo.content }}
             </p>
           </div>
@@ -68,6 +73,8 @@
                 <span class="ml-3">Edit</span>
               </a>
             </div>
+            <!-- <EditTodos /> -->
+
             <div class="-ml-px w-0 flex-1 flex">
               <a
                 class="button relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-white hover:bg-red-500"
@@ -88,17 +95,9 @@
 import { ref } from "vue";
 import { CheckIcon, PencilIcon, TrashIcon } from "@heroicons/vue/solid";
 
+const todoNumber = ref(1);
 const newTodo = ref("");
-const todos = ref([
-  {
-    name: "Çağatay Soyer",
-    content: "Wash the dishes",
-    done: false,
-    imageUrl: "https://github.com/norrec99.png",
-  },
-
-  // More todos...
-]);
+const todos = ref([]);
 
 export default {
   components: {
@@ -107,33 +106,41 @@ export default {
     TrashIcon,
   },
   setup() {
+    function incrementTodo() {
+      return "No." + todoNumber.value++ + " Todo";
+    }
     function addNewTodo() {
-      todos.value.push({
-        id: Date.now(),
-        done: false,
-        content: newTodo.value,
-        name: "Çağatay Soyer",
+      console.log(newTodo.value);
+      if (newTodo.value.trim().length > 0) {
+        todos.value.push({
+          id: Date.now(),
+          done: false,
+          content: newTodo.value,
+          name: incrementTodo(),
 
-        imageUrl: "https://github.com/norrec99.png",
-      });
-      newTodo.value = "";
+          imageUrl: "https://github.com/norrec99.png",
+        });
+        newTodo.value = "";
+      }
     }
 
     function toggleDone(todo) {
       todo.done = !todo.done;
-      console.log(todo.done);
+      // console.log(todo.done);
     }
 
     function removeTodo(index) {
-      console.log(this.todos[index].done);
+      // console.log(this.todos[index].done);
       if (this.todos[index].done === true) {
         todos.value.splice(index, 1);
       }
     }
 
     return {
+      todoNumber,
       todos,
       newTodo,
+      incrementTodo,
       addNewTodo,
       toggleDone,
       removeTodo,
@@ -147,5 +154,9 @@ export default {
 }
 .done {
   text-decoration: line-through;
+}
+.required:after {
+  content: " *";
+  color: red;
 }
 </style>
